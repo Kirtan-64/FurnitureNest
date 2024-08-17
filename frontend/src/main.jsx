@@ -12,6 +12,8 @@ import SignupPage from './pages/SignupPage.jsx';
 import DashboardPage from './pages/DashboardPage.jsx';
 import ProductPage from './components/ProductDetail.jsx';
 import ProductDetail from './components/ProductDetail.jsx';
+import ContactUsPage from './pages/ContactUsPage.jsx';
+import AboutUsPage from './pages/AboutUsPage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -25,6 +27,14 @@ const router = createBrowserRouter([
   {
     path: "/signup",
     element: <SignupPage />,
+  },
+  {
+    path: "/contact",
+    element: <ContactUsPage />,
+  },
+  {
+    path: "/about",
+    element: <AboutUsPage />,
   },
   {
     path: "/dashboard",

@@ -1,6 +1,13 @@
-
+import { Link, useNavigate } from "react-router-dom";
+import ContactUsPage from '../pages/ContactUsPage';
 
 const Navbar = () => {
+
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate('/login');
+    }
 
     const data = []
     return  (
@@ -40,16 +47,13 @@ const Navbar = () => {
         >
           <ul className="flex flex-col items-center space-y-2 md:ml-auto md:flex-row md:space-y-0">
             <li className="text-gray-600 md:mr-12 hover:text-blue-600">
-              <a href="#">Pricing</a>
+              <Link to="/contact">Contact Us</Link>
             </li>
             <li className="text-gray-600 md:mr-12 hover:text-blue-600">
-              <a href="#">Features</a>
+              <Link to="/about">About Us</Link>
             </li>
             <li className="text-gray-600 md:mr-12 hover:text-blue-600">
-              <a href="#">Support</a>
-            </li>
-            <li className="text-gray-600 md:mr-12 hover:text-blue-600">
-              <button className="rounded-md border-2 border-blue-600 px-6 py-1 font-medium text-blue-600 transition-colors hover:bg-blue-600 hover:text-white">
+              <button className="rounded-md border-2 border-blue-600 px-6 py-1 font-medium text-blue-600 transition-colors hover:bg-blue-600 hover:text-white" onClick={handleClick}>
                 Login
               </button>
             </li>
