@@ -24,31 +24,38 @@ const HomePage = () => {
 
             <div>
                 {/* carousel */}
-                <Carousel>
+                <Carousel showArrows="true" showIndicators="true" useKeyboardArrows="true" autoPlay="true" stopOnHover="true" swipeable="true" infiniteLoop="true" interval={2500} transitionTime={500} swipeScrollTolerance={5}>
                 <div>
-                    <img src="https://res.cloudinary.com/deyfwd4ge/image/upload/v1716010711/enhancing-privacy-in-ai-driven-environments_r8kce9.webp" />
-                    <p className="legend">Legend 1</p>
+                    <img src="https://res.cloudinary.com/deyfwd4ge/image/upload/v1723180116/minimalist-black-interior-with-black-sofa_2_qmkedl.jpg" />
+                    <p className="legend">Black Sofaset</p>
                 </div>
                 <div>
-                    <img src="https://res.cloudinary.com/deyfwd4ge/image/upload/v1715939887/cld-sample-4.jpg" />
-                    <p className="legend">Legend 2</p>
+                    <img src="https://res.cloudinary.com/deyfwd4ge/image/upload/v1723180116/gray-sofa-brown-living-room-with-copy-space_1_wckhmf.jpg" />
+                    <p className="legend">Grey Sofaset</p>
                 </div>
                 <div>
-                    <img src="https://res.cloudinary.com/deyfwd4ge/image/upload/v1715939866/samples/landscapes/landscape-panorama.jpg" />
-                    <p className="legend">Legend 3</p>
+                    <img src="https://res.cloudinary.com/deyfwd4ge/image/upload/v1723180117/home-entryway-with-modern-furnishing-design_1_hksich.jpg" />
+                    <p className="legend">Wooden Cabinet</p>
                 </div>
             </Carousel>
                 
 
             </div>
             /* product cards */
-            <div className="grid grid-cols-3 gap-4">
-                {data.map((item) => {
-                    return <ProductCard key={item} />;
-                })}
+            <div className="flex felx-col">
+                <div className="text-xl p-2">Chairs</div>
+                <div className='p-2'>
+                    <Carousel>
+                        {data.map((item) => {
+                            return (
+                                <ProductCard key={item}/>
+                            )
+                        })}
+                    </Carousel>
+                </div>
             </div>
 
-            {/* footer */}}
+            {/* footer */}
             <div>
                 <Footer />
             </div>

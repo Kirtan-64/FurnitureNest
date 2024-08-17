@@ -21,7 +21,7 @@ const ProductNav = () => {
       </a>
       <a
         href="#"
-        className="whitespace-nowrap inline-flex rounded-lg  py-2 px-3 text-sm font-medium text-gray-900 transition-all duration-200 ease-in-out"
+        className="whitespace-nowrap inline-flex rounded-lg py-2 px-3 text-sm font-medium text-gray-600 transition-all duration-200 ease-in-out hover:bg-gray-200 hover:text-gray-900"
       >
         {" "}
         Rentals{" "}
