@@ -2,16 +2,19 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const User = require("./models/userScehma");
+const { StatusCodes } = require("http-status-codes");
+const productRoutes = require("./routes/product.route");
+const userroutes = require("./routes/user.routes");
+const cookieParser = require("cookie-parser");
 const app = express();
 
+app.use(express.json());
+app.use("/products", productRoutes);
+app.use("/", userroutes);
+app.use(cookieParser());
 const port = process.env.PORT || 8000;
 
-// Middleware to parse JSON
-app.use(express.json());
-
-// MongoDB connection
 const uri = process.env.MONGODB_URL || "mongodb://localhost:27017/yourdbname";
-//  console.log("MongoDB URI:", process.env.MONGODB_URL);
 
 mongoose
   .connect(uri, {
@@ -19,7 +22,9 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => console.log("MongoDB Connected..."))
-  .catch((err) => console.log("err", err));
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+  });
 
 // Example route to test user creation
 app.post("/users", async (req, res) => {
@@ -27,9 +32,16 @@ app.post("/users", async (req, res) => {
     const user = new User(req.body);
     await user.save();
     const token = await user.generateAuthToken();
-    res.status(201).send({ user, token });
+    res.status(StatusCodes.CREATED).send({ user, token });
   } catch (error) {
-    res.status(400).send(error);
+    console.error("Error saving user:", error);
+    if (error.name === "ValidationError") {
+      res.status(StatusCodes.BAD_REQUEST).send({ message: error.message });
+    } else {
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .send({ message: "Internal server error" });
+    }
   }
 });
 

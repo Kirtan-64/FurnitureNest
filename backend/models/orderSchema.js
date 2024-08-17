@@ -1,3 +1,6 @@
+const mongoose = require("mongoose");
+const { MdOutlineScheduleSend } = require("react-icons/md");
+
 const orderSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -30,3 +33,5 @@ const orderSchema = new mongoose.Schema({
 });
 
 const Order = mongoose.model("Order", orderSchema);
+
+module.exports = Order;

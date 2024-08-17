@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { type } = require("serverless/lib/config-schema");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -45,18 +44,16 @@ userSchema.pre("save", async function (next) {
 });
 
 userSchema.methods.generateAuthToken = async function () {
-  try {
-    const token = jwt.sign(
-      { _id: this._id.toString() },
-      process.env.ACCESS_TOKEN
-    );
-    this.tokens = this.tokens.concat({ token });
-    await this.save();
-    return token;
-  } catch (error) {
-    console.log(error);
-    throw new Error("Error generating auth token");
-  }
+  const user = this;
+  const token = jwt.sign(
+    { _id: user._id.toString() },
+    process.env.ACCESS_TOKEN_SECRET
+  );
+
+  user.tokens = user.tokens.concat({ token });
+  await user.save();
+
+  return token;
 };
 
 const User = mongoose.model("User", userSchema);
