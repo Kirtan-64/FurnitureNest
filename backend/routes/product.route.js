@@ -1,13 +1,20 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const router = express.Router();
 const productController = require("../controllers/product.routes");
 
-const upload = require("../middleware/multer");
-router.post("/", upload.array("images", 5), productController.createProduct);
-router.get("/", productController.getAllProducts);
-router.get("/:id", productController.getProductByID);
-router.put("/:id", upload.array("images", 5), productController.updateProduct);
+// Create a new product
+router.post("/create", productController.createProduct);
+
+// Get all products
+router.get("/", productController.getProducts);
+
+// Get a product by ID
+router.get("/:id", productController.getProductById);
+
+// Update a product
+router.put("/:id", productController.updateProduct);
+
+// Delete a product
 router.delete("/:id", productController.deleteProduct);
 
 module.exports = router;

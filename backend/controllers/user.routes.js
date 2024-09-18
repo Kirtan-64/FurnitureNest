@@ -55,25 +55,21 @@ const getProfile = async (req, res) => {
 
 const logout = async (req, res) => {
   try {
+    // Clear all tokens from the user
     req.user.tokens = [];
 
-    // Save the user to ensure the tokens are cleared
+    // Save the user to persist token removal
     await req.user.save();
 
     // Clear the cookie by setting an expired date
     res.clearCookie("auth_token", { path: "/" });
 
-    // Delete the user from the database
-    await req.user.deleteOne();
-
     res.send({
       message:
-        "Successfully logged out from all sessions, cleared the cookie, and deleted the user account.",
+        "Successfully logged out from all sessions and cleared the cookie.",
     });
   } catch (error) {
-    res
-      .status(500)
-      .send({ error: "Failed to log out and delete user account." });
+    res.status(500).send({ error: "Failed to log out properly." });
   }
 };
 
@@ -81,14 +77,21 @@ const updateProfile = async (req, res) => {
   try {
     const updates = Object.keys(req.body);
     const allowedUpdates = ["name", "password", "address", "phone"];
-    const operate = updates.every((update) => allowedUpdates.includes(update));
-    if (!operate) {
+    const isValidOperation = updates.every((update) =>
+      allowedUpdates.includes(update)
+    );
+
+    if (!isValidOperation) {
       return res.status(400).send("Invalid Updates");
     }
+
     updates.forEach((update) => (req.user[update] = req.body[update]));
+
+    // If password is being updated, hash it
     if (req.body.password) {
       req.user.password = await bcrypt.hash(req.body.password, 10);
     }
+
     await req.user.save();
     res.send(req.user);
   } catch (error) {

@@ -1,82 +1,71 @@
 const Product = require("../models/productSchema");
-const mongoose = require("mongoose");
 
+// Create a new product
 const createProduct = async (req, res) => {
   try {
-    const product = new Product({
-      ...req.body,
-      images: req.files.map((file) => file.path),
-    });
+    const product = new Product(req.body);
     await product.save();
-    res.status(201).json({ message: "Product created successfully" });
+    res.status(201).json(product);
   } catch (error) {
-    res.status(400).json({ message: "Failed to create product" });
+    res.status(400).json({ error: error.message });
   }
 };
 
-const getAllProducts = async (req, res) => {
+// Get all products
+const getProducts = async (req, res) => {
   try {
-    const products = Product.find({});
-    res.status(200).send(products);
+    const products = await Product.find().populate("category");
+    res.status(200).json(products);
   } catch (error) {
-    console.log(error);
-    res.status(400).send(error);
+    res.status(400).json({ error: error.message });
   }
 };
 
-const getProductByID = async (req, res) => {
+// Get a specific product by ID
+const getProductById = async (req, res) => {
   try {
-    const productId = req.params.id;
-
-    // Validate if `productId` is a valid ObjectId
-    if (!mongoose.Types.ObjectId.isValid(productId)) {
-      return res.status(400).json({ error: "Invalid product ID" });
-    }
-
-    const product = await Product.findById(productId);
-
+    const product = await Product.findById(req.params.id).populate("category");
     if (!product) {
-      return res.status(404).json({ msg: "Product not found" });
+      return res.status(404).json({ error: "Product not found" });
     }
-
     res.status(200).json(product);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(400).json({ error: error.message });
   }
 };
 
+// Update a product
 const updateProduct = async (req, res) => {
   try {
-    const updates = Object.keys(req.body);
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
     if (!product) {
-      res.status(404).send();
+      return res.status(404).json({ error: "Product not found" });
     }
-    updates.forEach((update) => (product[update] = req.body[update]));
-    product.images = req.files.map((file) => file.path);
-    await product.save();
-    res.status(200).send(product);
+    res.status(200).json(product);
   } catch (error) {
-    res.status(404).send(error);
+    res.status(400).json({ error: error.message });
   }
 };
 
+// Delete a product
 const deleteProduct = async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) {
-      res.status(404).send();
+      return res.status(404).json({ error: "Product not found" });
     }
-    res.status(200).send(product);
+    res.status(200).json({ message: "Product deleted successfully" });
   } catch (error) {
-    res.status(404).send(error);
+    res.status(400).json({ error: error.message });
   }
 };
 
 module.exports = {
+  getProducts,
+  getProductById,
   createProduct,
-  getAllProducts,
   deleteProduct,
   updateProduct,
-  getProductByID,
 };
