@@ -19,75 +19,87 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    console.log("Attempting to log in user with email:", email);
 
+    const user = await User.findOne({ email });
     if (!user) {
+      console.log("Login failed: User not found");
       return res.status(400).send("Login Failed: User not found");
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    console.log("User found:", user);
 
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
+      console.log("Login failed: Incorrect password");
       return res.status(402).send("Login Failed: Incorrect password");
     }
 
     const token = await user.generateAuthToken();
+    console.log("Token generated:", token);
 
-    // Set the token in a cookie
     res.cookie("auth_token", token, {
-      httpOnly: true, // Prevents JavaScript from accessing the cookie
-      secure: process.env.NODE_ENV === "production", // Ensures cookie is sent over HTTPS in production
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
       maxAge: 1000 * 60 * 60 * 24 * 7, // 1 week
     });
 
-    res.send({
-      user,
-      token,
-    });
+    res.send({ user, token });
   } catch (error) {
-    res.status(500).send(error);
+    console.log("Login error:", error);
+    res.status(500).send("Login failed due to server error");
   }
-};
-// await user.save();
-const getProfile = async (req, res) => {
-  res.send(req.user);
 };
 
 const logout = async (req, res) => {
   try {
-    // Clear all tokens from the user
-    req.user.tokens = [];
+    // Find and delete the user from the database
+    await User.findByIdAndDelete(req.user._id);
 
-    // Save the user to persist token removal
-    await req.user.save();
+    // Clear the authentication cookie (if used)
+    res.clearCookie("accessToken", { path: "/" });
 
-    // Clear the cookie by setting an expired date
-    res.clearCookie("auth_token", { path: "/" });
-
-    res.send({
-      message:
-        "Successfully logged out from all sessions and cleared the cookie.",
+    return res.status(200).json({
+      message: "User removed and logged out successfully.",
+      success: true,
     });
   } catch (error) {
-    res.status(500).send({ error: "Failed to log out properly." });
+    return res.status(500).json({
+      message: error.message || "Logout failed",
+      success: false,
+    });
   }
 };
 
 const updateProfile = async (req, res) => {
   try {
+    // Log the user to see if it exists
+    console.log("Current user:", req.user);
+
+    if (!req.user) {
+      return res.status(400).send("User not authenticated.");
+    }
+
     const updates = Object.keys(req.body);
+    console.log("Updates:", updates);
+
+    if (updates.length === 0) {
+      return res.status(400).send("No updates provided");
+    }
+
     const allowedUpdates = ["name", "password", "address", "phone"];
     const isValidOperation = updates.every((update) =>
       allowedUpdates.includes(update)
     );
 
     if (!isValidOperation) {
-      return res.status(400).send("Invalid Updates");
+      return res.status(400).send("Invalid updates");
     }
 
+    // Apply updates to user
     updates.forEach((update) => (req.user[update] = req.body[update]));
 
-    // If password is being updated, hash it
+    // If updating password, hash it
     if (req.body.password) {
       req.user.password = await bcrypt.hash(req.body.password, 10);
     }
@@ -95,6 +107,7 @@ const updateProfile = async (req, res) => {
     await req.user.save();
     res.send(req.user);
   } catch (error) {
+    console.error("Error in updateProfile:", error); // Log the error
     res.status(400).send(error);
   }
 };
@@ -103,6 +116,5 @@ module.exports = {
   registerUser,
   loginUser,
   logout,
-  getProfile,
   updateProfile,
 };

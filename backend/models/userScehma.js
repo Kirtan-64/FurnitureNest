@@ -32,19 +32,10 @@ const userSchema = new mongoose.Schema({
   ],
 });
 
-userSchema.pre("save", async function (next) {
-  try {
-    if (this.isModified("password")) {
-      this.password = await bcrypt.hash(this.password, 10);
-    }
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
-
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
+  console.log("Generating token for user:", user._id);
+
   const token = jwt.sign(
     { _id: user._id.toString() },
     process.env.ACCESS_TOKEN_SECRET
@@ -55,6 +46,19 @@ userSchema.methods.generateAuthToken = async function () {
 
   return token;
 };
+
+userSchema.pre("save", async function (next) {
+  try {
+    if (this.isModified("password")) {
+      console.log("Hashing password for user:", this.email);
+      this.password = await bcrypt.hash(this.password, 10);
+    }
+    next();
+  } catch (error) {
+    console.log("Error in hashing password:", error);
+    next(error);
+  }
+});
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;
