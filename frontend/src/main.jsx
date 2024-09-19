@@ -14,6 +14,11 @@ import ProductPage from './components/ProductDetail.jsx';
 import ProductDetail from './components/ProductDetail.jsx';
 import ContactUsPage from './pages/ContactUsPage.jsx';
 import AboutUsPage from './pages/AboutUsPage.jsx';
+import AllProductsPage from './pages/AllProductsPage.jsx'
+import AllRentalsPage from './pages/AllRentalsPage.jsx';
+import AllSalesPage from './pages/AllSalesPage.jsx';
+import MyItemsPage from './pages/MyItemsPage.jsx';
+import MyRentalsPage from './pages/MyRentalsPage.jsx';
 
 const router = createBrowserRouter([
   {
@@ -43,6 +48,26 @@ const router = createBrowserRouter([
   {
     path: "/product/:id",
     element: <ProductDetail/>,
+  },
+  {
+    path: "/allproducts",
+    element: <AllProductsPage />
+  },
+  {
+    path: "/allrentals",
+    element: <AllRentalsPage />
+  },
+  {
+    path: "/allsales",
+    element: <AllSalesPage />
+  },
+  {
+    path: "/items",
+    element: <MyItemsPage />
+  },
+  {
+    path: "/rentals",
+    element: <MyRentalsPage />
   }
 ]);
 

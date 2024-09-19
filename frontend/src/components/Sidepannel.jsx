@@ -1,3 +1,5 @@
+import {Link} from "react-router-dom";
+
 const Sidepannel = () => {
     return (
         <div className="flex h-screen flex-col justify-between border-e bg-white">
@@ -5,32 +7,32 @@ const Sidepannel = () => {
 
     <ul className="mt-6 space-y-1">
       <li>
-        <a
-          href="#"
+        <Link
+          to="/dashboard"
           className="block rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700"
         >
           Dashboard
-        </a>
+        </Link>
       </li>
 
       
 
       <li>
-        <a
-          href="#"
+        <Link
+          to="/items"
           className="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700"
         >
           My Items
-        </a>
+        </Link>
       </li>
 
       <li>
-        <a
-          href="#"
+        <Link
+          to="/rentals"
           className="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700"
         >
           My Rentals
-        </a>
+        </Link>
       </li>
 
     </ul>

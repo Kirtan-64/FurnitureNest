@@ -6,7 +6,7 @@ import ProductCard from "../components/ProductCard";
 
 const HomePage = () => {
 
-    const data = [1,2,3,4,5,6,7,8]
+    const data = [1,2,3,4,5,6,7,8,9,1,1,1,1,1,1,1,1]
 
     return (
         <div className="flex flex-col bg-gray-200 w-full h-screen">
@@ -41,17 +41,16 @@ const HomePage = () => {
                 
 
             </div>
-            /* product cards */
+            {/* product cards */}
             <div className="flex felx-col">
-                <div className="text-xl p-2">Chairs</div>
-                <div className='p-2'>
-                    <Carousel>
+                <div className='p-2 grid grid-cols-1 sm:grid-cols-5 md:grid-cols-7'>
                         {data.map((item) => {
                             return (
+                                <div className="p-2">
                                 <ProductCard key={item}/>
+                                </div>
                             )
                         })}
-                    </Carousel>
                 </div>
             </div>
 

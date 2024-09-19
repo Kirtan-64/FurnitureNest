@@ -1,3 +1,5 @@
+import {Link} from "react-router-dom"
+
 const Footer = () => {
     return (
         <footer className="relative mt-20 bg-gray-900 px-4 pt-20">
@@ -12,12 +14,9 @@ const Footer = () => {
     aria-label="Footer Navigation"
     className="mx-auto mb-10 flex max-w-lg flex-col gap-10 text-center sm:flex-row sm:text-left"
   >
-    <a href="#" className="font-medium text-white">
-      Demo
-    </a>
-    <a href="#" className="font-medium text-white">
+    <Link to="/contact" className="font-medium text-white">
       Support
-    </a>
+    </Link>
     <a href="#" className="font-medium text-white">
       Privacy Policy
     </a>
@@ -26,7 +25,7 @@ const Footer = () => {
     </a>
   </nav>
   <p className="py-10 text-center text-gray-300">
-    © 2022 Boleno | All Rights Reserved
+    © 2024 Furniture Nest | All Rights Reserved
   </p>
 </footer>
 
