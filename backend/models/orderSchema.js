@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { MdOutlineScheduleSend } = require("react-icons/md");
 
 const orderSchema = new mongoose.Schema({
   user: {
@@ -23,11 +22,17 @@ const orderSchema = new mongoose.Schema({
   },
   returnDate: {
     type: Date,
+    required: function () {
+      return this.orderType === "rent";
+    },
   },
-  totalPrice: { type: Number, required: true },
+  totalPrice: {
+    type: Number,
+    required: true,
+  },
   status: {
     type: String,
-    enum: ["pending", "completed", "cancelled"],
+    enum: ["pending", "completed", "cancelled", "in-progress"],
     default: "pending",
   },
 });

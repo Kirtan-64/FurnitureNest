@@ -6,11 +6,13 @@ const { StatusCodes } = require("http-status-codes");
 const productRoutes = require("./routes/product.route");
 const userroutes = require("./routes/user.routes");
 const cookieParser = require("cookie-parser");
+const orderroutes = require("./routes/order.route");
 const app = express();
 
 app.use(express.json());
 app.use("/products", productRoutes);
 app.use("/", userroutes);
+app.use("/order", orderroutes);
 app.use(cookieParser());
 const port = process.env.PORT || 8000;
 

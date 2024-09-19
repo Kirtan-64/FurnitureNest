@@ -8,5 +8,4 @@ router.post("/login", userController.loginUser);
 router.post("/logout", authmiddleware, userController.logout);
 router.patch("/update", authmiddleware, userController.updateProfile);
 
-// module.exports = router;
 module.exports = router;

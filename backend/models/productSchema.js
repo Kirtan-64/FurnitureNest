@@ -16,14 +16,14 @@ const productSchema = new mongoose.Schema({
   type: {
     // enum type
     type: String,
-    enum: ["Sale", "Rent"],
-    default: "Sale",
+    enum: ["sale", "rent"],
+    default: "sale",
     required: true,
   },
   image: {
     type: String,
   },
-  Price: {
+  Productrice: {
     type: Number,
   },
   available: {
