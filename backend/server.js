@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const User = require("./models/userScehma");
 const { StatusCodes } = require("http-status-codes");
 const productRoutes = require("./routes/product.route");
@@ -15,6 +16,7 @@ app.use("/", userroutes);
 app.use("/order", orderroutes);
 app.use(cookieParser());
 const port = process.env.PORT || 8000;
+app.use(cors({ origin: "*", credentials: true }));
 
 const uri = process.env.MONGODB_URL || "mongodb://localhost:27017/yourdbname";
 
